@@ -1,55 +1,19 @@
 const express = require('express')
 
-const xlsx = require('xlsx')
+var xlsx = require('node-xlsx')
 
-const workbook = xlsx.readFile('./1.xlsx', { type: 'UTF-8' })
-var data =xlsx.utils.sheet_to_json(workbook);
-console.log('*********** workboot', JSON.stringify(workbook));
-// JSON.stringify(workbook)
-// var dataa =xl.utils.sheet_to_json(worksheet);
+var sheets = xlsx.parse('2.xlsx');//获取到所有sheets
 
-// const sheetNames = workbook.SheetNames
+console.log('***** sheets', JSON.stringify(sheets));
+sheets.forEach(function (sheet) {
+  // console.log(sheet);
+  for (var rowId in sheet['data']) {
+    // console.log(rowId);
+    var row = sheet['data'][rowId];
+    // console.log(row);
+  }
 
-// const sheetTab = workbook.Sheets[sheetNames[0]]
-
-// const sheetJson = xlsx.utils.sheet_to_json(sheetTab)
-
-// sheetJson.forEach(item => {
-//     console.log(item)
-// })
-
-// var xlsx = require('node-xlsx')
-
-// var sheets = xlsx.parse('1.xls');//获取到所有sheets
-
-// sheets.forEach(function (sheet) {
-//   console.log(sheet);
-//   // for (var rowId in sheet['data']) {
-//   //   console.log(rowId);
-//   //   var row = sheet['data'][rowId];
-//   //   console.log(row);
-//   // }
-
-// });
-// var iconv = require('iconv-lite');
-// var fs = require('fs');
-// fs.readFile('1.xml', 'utf-8', (err, data) =>{
-//   if (err) throw err;
-//   var str = iconv.decode(data, 'utf-8');
-//   // console.log('********** str', str);
-// });
-// var buf = new Buffer(fileStr, 'binary');
-// var str = iconv.decode(buf, 'GBK');
-
-// console.log(str);
-// fs.readFile('./1.xls', "utf8", function (err, data) {
-//   if (err)
-//     console.log("读取文件fail " + err);
-//   else {
-//     // 读取成功时  
-//     console.log(data);// 直接输出中文字符串了  
-//   }
-// });
+});
 
 var $mysql = require("mysql");
 var sql = require("./mysql");
@@ -79,6 +43,10 @@ $sql.query(select, function (err, r) {   //err提示错误信息  res是查询�
 })
 app.get("/list", function (req, res) {
   res.json({ result: list });
+});
+
+app.get("/sheets", function (req, res) {
+  res.json({ result: sheets });
 });
 
 app.get('/', (req, res) => res.send('Hello World!'))
